@@ -11,4 +11,4 @@ streamlit==1.27.2
 streamlit_folium==0.15.0
 torch==2.0.1
 twilio==8.9.1
-streamlit==1.25.0
+streamlit>=1.25.0,<=1.27.2
