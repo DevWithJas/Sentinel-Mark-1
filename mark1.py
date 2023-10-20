@@ -24,12 +24,60 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
+import streamlit as st
+import time
+import random
+import pandas as pd
+import numpy as np
+import plotly.express as px
 
-# Set the page to full width
-st.set_page_config(layout="wide")
 
-# Streamlit app title
+
+# Create a temporary loading message
+loading_message = st.empty()
+
+# Display a large welcome message using Markdown
+loading_message.markdown("<h1>Welcome to Sentinel Mark1: A Crime Predictive Model for National Safety</h1>", unsafe_allow_html=True)
+
+# Sleep for 1 second to display the message
+time.sleep(1)
+
+# Create random data for the dynamic line chart
+data = pd.DataFrame({'Time': range(100), 'Value': [random.uniform(0, 1) for _ in range(100)]})
+
+# Create a line chart
+progress_chart = st.line_chart(data)
+
+# Create a progress bar with a fun message
+progress_bar = st.progress(0)
+
+# Simulate progress with the chart
+for i in range(101):
+    time.sleep(0.05)  # Simulate progress
+
+    # Update the chart data to create the appearance of progress
+    if i == 0:
+        new_value = random.uniform(0, 1)
+    else:
+        if i % 2 == 0:
+            new_value = max(data['Value'][i - 1] + random.uniform(-0.1, 0.1), 0)
+        else:
+            new_value = min(data['Value'][i - 1] + random.uniform(-0.1, 0.1), 1)
+        
+    new_data = pd.DataFrame({'Time': range(i + 1), 'Value': data['Value'].tolist()[:i] + [new_value]})
+    progress_chart.line_chart(new_data)
+
+    # Update the progress bar and loading message
+    progress_bar.progress(i / 100)
+
+# Clear the loading message and progress bar after 5 seconds
+time.sleep(5)
+loading_message.empty()
+progress_bar.empty()
+
+# Now you can continue with the rest of your Streamlit app
 st.title("Sentinel Mark 1")
+# ... rest of your code ...
 
 # File upload section
 st.sidebar.header("Upload Crime Analysis File")
